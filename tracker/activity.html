@@ -97,7 +97,8 @@
                             <th>Media</th>
                         </tr>
                         <!-- TODO use v-for to create one table row for each activity record -->
-                        <tr v-for="record in activityRecords">
+                        <!--working on vbind ask clara-->
+                        <tr v-for="record in activityRecords" v-bind="">
                             <td>{{shortDate(record.date)}}</td>
                             <td>{{record.hours}}</td>
                             <td>{{record.type}}</td>
