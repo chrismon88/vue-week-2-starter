@@ -29,6 +29,8 @@
                     </Ul>
                 </div>
 
+
+
                 <div class="form-group">
                     <!-- TODO display name of activity in the label -->
                     <label class="form-label" for="date">What date did you do this activity?</label>
@@ -72,12 +74,23 @@
                     <input id="media2" class="form-check-input" type="radio"value="Gym" v-model="medium"> <!-- set value for radio buttons-->
                     <label class="form-check-label" for="media2">Gym  <!-- TODO Display text -->  </label>
                 </div>
+<!-- workout checkbox-->
+                <div>
+                    <input id="completed" type="checkbox" v-model="completed" >
+                    <label for = "completed"> Workout completed </label>
 
+                </div>
+
+                <div>
+<!-- notes field would i vmodel?? notes no right??-->
+                    <input id="note" type="text" v-model="notes" >
+                    <label for = "note"> Notes </label>
+                </div>
                 <div>
                     <!-- TODO Add v-on:click -->
                     <button class="btn btn-primary mt-2" type="button" v-on:click="submit">Add record</button>
                 </div>
-                
+
             </div>
         </div>
 
@@ -95,14 +108,18 @@
                             <th>How many hours?</th>
                             <th>Type</th>
                             <th>Media</th>
+                            <th>Done</th>
+                            <th>Notes</th>
                         </tr>
                         <!-- TODO use v-for to create one table row for each activity record -->
                         <!--working on vbind ask clara-->
-                        <tr v-for="record in activityRecords" v-bind="">
+                        <tr v-for="record in activityRecords">
                             <td>{{shortDate(record.date)}}</td>
                             <td>{{record.hours}}</td>
                             <td>{{record.type}}</td>
                             <td>{{record.medium}}</td>
+                            <td>{{record.completed}}</td>
+                            <td>{{record.notes}}</td>
                         </tr>
                     </table>
                 </div>
@@ -139,11 +156,15 @@
                 //vmodel for form inputs
                 dateString:'',
                 hours: 1,
+                completed: true,
                 type:'Upper body',
                 medium:'Gym',
                     // UWill be used to select type of workout
                 types:['Upper body','Lower body','Back','Cardio'],
-                errors:[]
+                errors:[],
+                notes:'',
+
+
             }
         },
         methods: {
@@ -172,40 +193,52 @@
                         date: date,
                         hours: this.hours,
                         type: this.type,
-                        medium: this.medium
+                        completed: this.completed,
+                        medium: this.medium,
+                        numCharacters: this.numCharecters
                     }
 
                     this.activityRecords.push(record)
 
                     //sort activity records
-                    this.activityRecords.sort(function (r1, r2){
+                    this.activityRecords.sort(function (r1, r2) {
                         // sorts oldest records first, most recent last, unixtimestamp.com
                         return r1.date.getTime() - r2.date.getTime()
+
                     })
+
                 }
             },
-            shortDate(date){
+            shortDate(date) {
                 return new Intl.DateTimeFormat('en-US', {timeZone: 'UTC'}).format(date)
 
-            }
-        },
-        computed:{
-            totalRecords(){
-               if (this.activityRecords.length === 1) {
-                   return '1 record'
-               }else{
-                   return this.activityRecords.length + ' records'
-               }
             },
-            totalHours(){
-               let total = 0
-               this.activityRecords.forEach(function (record){
-                   total= total + record.hours
-               })
-                return total
+            notes(notes) {
+                if (notes > 40) {
+                    return {notes}.format()
+                }
+                    //return function (start,0)
+                }
+            },
+            computed: {
+                totalRecords() {
+                    if (this.activityRecords.length === 1) {
+                        return '1 record'
+                    } else {
+                        return this.activityRecords.length + ' records'
+                    }
+                },
+                totalHours() {
+                    let total = 0
+                    this.activityRecords.forEach(function (record) {
+                        total = total + record.hours
+                    })
+                    return total
+                },
+
             }
         }
-    })
+
     // dont forget to mount Vue app!!
     app.mount('#app')
 
